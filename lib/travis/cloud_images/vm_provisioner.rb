@@ -31,7 +31,7 @@ RUBY
         INSTALL_CHEF = [
           'mkdir -p /tmp/vm-provisioning',
           'cd /tmp/vm-provisioning',
-          'curl -L https://www.opscode.com/chef/install.sh | sudo bash -s -- -v 11.16.2-1'
+          'which chef-solo || ( curl -L https://www.opscode.com/chef/install.sh | sudo bash -s -- -v 11.16.2-1 )'
         ]
 
         # It is important that there is exactly one
@@ -40,9 +40,9 @@ RUBY
           "echo #{Shellwords.escape(Assets::SOLO_RB)} > /tmp/vm-provisioning/assets/solo.rb",
           'cd /tmp/vm-provisioning',
           'rm -rf travis-cookbooks',
-          'curl -L https://api.github.com/repos/travis-ci/travis-cookbooks/tarball/%{branch} > travis-cookbooks.tar.gz',
+          'curl -L https://api.github.com/repos/ayufan/travis-cookbooks/tarball/%{branch} > travis-cookbooks.tar.gz',
           'tar xvf travis-cookbooks.tar.gz',
-          'mv travis-ci-travis-cookbooks-* travis-cookbooks',
+          'mv ayufan-travis-cookbooks-* travis-cookbooks',
           'rm travis-cookbooks.tar.gz'
         ]
 
@@ -151,7 +151,7 @@ RUBY
       end
 
       def parse_template_configs
-        configs = [:common, :standard].map { |type| parse_template_config(type) }
+        configs = [:common, :docker].map { |type| parse_template_config(type) }
         configs.inject({}) do |result, config|
           result['json'] = (result['json'] || {}).deep_merge(config['json'] || {})
           result['recipes'] = (result['recipes'] || []).concat(config['recipes'] || [])

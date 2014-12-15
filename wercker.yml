@@ -1,0 +1,55 @@
+box: wercker-labs/docker
+command-timeout: 60
+no-response-timeout: 60
+build:
+  steps:
+    - install-packages:
+        packages: lxc-docker make libmysqlclient-dev libpq-dev ruby-dev bundler
+    - script:
+        name: print the docker version
+        code: docker version
+    - script:
+        name: print system-wide docker info
+        code: docker info
+    - script:
+        name: install dependencies
+        code: bundle install
+    - script:
+        name: download VM templates
+        code: git clone https://github.com/ayufan/travis-cookbooks.git ../travis-cookbooks
+    - script:
+        name: download base image
+        code: docker pull ayufan/travis-base-image:latest
+    - script:
+        name: install dependencies
+        code: bundle install
+    - script:
+        name: build standard template
+        code: bundle exec thor travis:images:create -p docker standard
+    - script:
+        name: build android template
+        code: bundle exec thor travis:images:create -p docker android
+    - script:
+        name: build ruby template
+        code: bundle exec thor travis:images:create -p docker ruby
+    - script:
+        name: build erlang template
+        code: bundle exec thor travis:images:create -p docker erlang
+    - script:
+        name: build haskell template
+        code: bundle exec thor travis:images:create -p docker haskell
+    - script:
+        name: build jvm template
+        code: bundle exec thor travis:images:create -p docker jvm
+    - script:
+        name: build node-js template
+        code: bundle exec thor travis:images:create -p docker node-js
+    - script:
+        name: build perl template
+        code: bundle exec thor travis:images:create -p docker perl
+    - script:
+        name: build php template
+        code: bundle exec thor travis:images:create -p docker php
+    - script:
+        name: build python template
+        code: bundle exec thor travis:images:create -p docker python

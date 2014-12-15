@@ -2,6 +2,7 @@ require 'travis/cloud_images/config'
 require 'travis/cloud_images/blue_box'
 require 'travis/cloud_images/open_stack'
 require 'travis/cloud_images/sauce_labs'
+require 'travis/cloud_images/docker'
 require 'travis/cloud_images/vm_provisioner'
 require 'thor'
 require 'digest'
@@ -239,11 +240,12 @@ module Travis
         end
 
         def provider_class
-          { 'blue_box' => BlueBox, 'sauce_labs' => SauceLabs, 'open_stack' => OpenStack }[options["provider"]]
+          { 'blue_box' => BlueBox, 'sauce_labs' => SauceLabs, 'open_stack' => OpenStack, 'docker' => Docker }[options["provider"]]
         end
 
         def generate_password
-          Digest::SHA1.base64digest(OpenSSL::Random.random_bytes(30)).gsub(/[\&\+\/\=\\]/, '')[0..19]
+          'travis'
+          # Digest::SHA1.base64digest(OpenSSL::Random.random_bytes(30)).gsub(/[\&\+\/\=\\]/, '')[0..19]
         end
 
         def standard_image?(image_type)

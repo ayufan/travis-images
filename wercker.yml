@@ -53,3 +53,7 @@ build:
     - script:
         name: build python template
         code: bundle exec thor travis:images:create -p docker python
+    - script:
+        name: build python template
+        code: bundle exec thor travis:images:create -p docker go
+

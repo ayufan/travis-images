@@ -45,8 +45,7 @@ module Travis
         end
 
         def destroy
-          @container.kill
-          @container.remove
+          @container.delete(:force => true)
           @container = nil
         end
 
